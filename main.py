@@ -96,24 +96,24 @@ class TriggerEngine:
             self.writer.flush()
         return (plot_train_acc,train_losses,test_accuracy,test_losses)
     
-     def find_lr(self,model,train_loader, test_loader, start_lr, end_lr):
+    def find_lr(self,model,train_loader, test_loader, start_lr, end_lr):
         
         
-         lr_epochs = self.config['lr_finder']['lr_epochs']
-         num_iterations = len(test_loader) * lr_epochs
+        lr_epochs = self.config['lr_finder']['lr_epochs']
+        num_iterations = len(test_loader) * lr_epochs
 
-         criterion = nn.CrossEntropyLoss()
-         optimizer = optim.SGD(model.parameters(), lr=start_lr, momentum=0.90, weight_decay=self.l2_factor)
-         lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
-         lr_finder.range_test(train_loader, val_loader=test_loader, end_lr=end_lr, num_iter=num_iterations, step_mode="linear",diverge_th=50)
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(model.parameters(), lr=start_lr, momentum=0.90, weight_decay=self.l2_factor)
+        lr_finder = LRFinder(model, optimizer, criterion, device="cuda")
+        lr_finder.range_test(train_loader, val_loader=test_loader, end_lr=end_lr, num_iter=num_iterations, step_mode="linear",diverge_th=50)
         
-         # Plot
-         max_lr = lr_finder.history['lr'][lr_finder.history['loss'].index(lr_finder.best_loss)]
-         #max_lr = lr_finder.plot(suggest_lr=True,skip_start=0, skip_end=0)
+        # Plot
+        max_lr = lr_finder.history['lr'][lr_finder.history['loss'].index(lr_finder.best_loss)]
+        #max_lr = lr_finder.plot(suggest_lr=True,skip_start=0, skip_end=0)
 
-         # Reset graph
-         lr_finder.reset()
-         return max_lr
+        # Reset graph
+        lr_finder.reset()
+        return max_lr
     
         
     def save_experiment(self,model, experiment_name,path):
