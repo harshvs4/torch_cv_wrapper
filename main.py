@@ -48,7 +48,7 @@ class TriggerEngine:
         l1_factor = self.config['training_params']['l1_factor']
         max_epoch = self.config['lr_finder']['max_epoch']
         
-        criterion = nn.CrossEntropyLoss() if self.config['criterion'] == 'CrossEntropyLoss' else F.nll_loss()
+        criterion = nn.CrossEntropyLoss()
         opt_func = optim.Adam if self.config['optimizer']['type'] == 'optim.Adam' else optim.SGD
         lr = self.config['optimizer']['args']['lr']
         
