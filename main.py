@@ -46,7 +46,7 @@ class TriggerEngine:
         epochs=self.config['training_params']['epochs']
         
         l1_factor = self.config['training_params']['l1_factor']
-        max_epoch = self.config['lr_finder']['max_epoch']
+        #max_epoch = self.config['training_params']['epochs']
         
         criterion = nn.CrossEntropyLoss()
         opt_func = optim.Adam if self.config['optimizer']['type'] == 'optim.Adam' else optim.SGD
@@ -68,7 +68,7 @@ class TriggerEngine:
             if self.config['lr_scheduler'] == 'OneCycleLR': 
                 scheduler = OneCycleLR(optimizer=optimizer, max_lr=lrmax,
                                       epochs=epochs, steps_per_epoch=len(train_loader),
-                                      pct_start=max_epoch/epochs,div_factor=8)
+                                      pct_start=epochs,div_factor=8)
             else:
                 scheduler = ReduceLROnPlateau(optimizer, factor=0.2, patience=3,verbose=True,mode='max')
         else:
@@ -99,7 +99,7 @@ class TriggerEngine:
     def find_lr(self,model,train_loader, test_loader, start_lr, end_lr):
         
         
-        lr_epochs = self.config['lr_finder']['lr_epochs']
+        lr_epochs = self.config['training_params']['epochs']
         num_iterations = len(test_loader) * lr_epochs
 
         criterion = nn.CrossEntropyLoss()
